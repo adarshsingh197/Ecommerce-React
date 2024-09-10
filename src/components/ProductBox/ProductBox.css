@@ -1,0 +1,14 @@
+.product-item {
+    display: block;
+}
+
+.product-img {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    border: 1px solid black;
+}
+
+.product-img > img {
+    height: 80%;
+}

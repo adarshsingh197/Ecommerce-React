@@ -1,8 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Auth.css'
 import Auth from '../../components/Auth/Auth'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { signup } from '../../api/fakestoreProd'
+import axios from 'axios'
 const Signup = () => {
+  const navigate = useNavigate();
+  const [resetSignUpForm,setResetSignUpForm]= useState(false)
+
+
+  async function onAuthFormSubmit(arg) {
+    try {
+      const response = await axios.post(signup(), {
+        username: arg.username,
+        email: arg.email,
+        password: arg.password,
+      });
+
+        console.log("Signup successful!");
+
+        navigate("/signin");
+     
+    } catch (error) {
+      console.log("error");
+      setResetSignUpForm(true);
+    }
+  }
+  
   return (
     <div className="container">
     <div className="row">
@@ -11,7 +35,13 @@ const Signup = () => {
     <div className="login-wrapper" id="loginForm">
     <h4 className="text-center">Signup</h4>
 
-      <Auth/>
+    <Auth  
+  onSubmit={
+    onAuthFormSubmit
+  }
+  resetForm={resetSignUpForm}
+/>
+
       <div className="signup-btn text-center" id="showSignupBtn">
       <Link to="/signin">Already have an Account? Sign In Here</Link>  
       </div>

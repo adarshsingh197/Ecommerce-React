@@ -1,8 +1,18 @@
-export const categoriesapi="https://fakestoreapi.com/products/categories"
-export const allproductsapi="https://fakestoreapi.com/products"
+export function categoriesapi(){
+   return `${import.meta.env.VITE_FAKE_STORE_URL}/products/categories`
+}
+export const allproductsapi=`${import.meta.env.VITE_FAKE_STORE_URL}/products`
 export function getallproductsbyCategory(category){
-    return `https://fakestoreapi.com/products/category/${category}`;
+    return `${import.meta.env.VITE_FAKE_STORE_URL}/products/category/${category}`;
 }
 export function getProduct(id) {
-    return `https://fakestoreapi.com/products/${id}`;
+    return `${import.meta.env.VITE_FAKE_STORE_URL}/products/${id}`;
+}
+export function signup(){
+    return `${import.meta.env.VITE_FAKE_STORE_URL}/users`;
+
+}
+export function signin(){
+    return `${import.meta.env.VITE_FAKE_STORE_URL}/auth/login`;
+
 }

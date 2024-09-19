@@ -1,77 +1,61 @@
-import React, { useEffect } from 'react'
-import { useState } from 'react';
-const Auth = ({onSubmit,resetForm }) => {
-  console.log(resetForm)
+import React, { useEffect, useImperativeHandle, useState } from "react";
 
-  const [formDetails, setFormDetails] = useState({email: '', password: '', username: '', isLoading: false});
+function Auth({ onSubmit }, ref) {
 
-  function updateEmail(updatedEmail) {
-      setFormDetails({...formDetails, email: updatedEmail});
-  }
 
-  function updatePassword(updatedPassword) {
-      setFormDetails({...formDetails, password: updatedPassword});
-  }
+    const [formDetails, setFormDetails] = useState({email: '', password: '', username: '', isLoading: false});
 
-  function updateUsername(updateUsername) {
-      setFormDetails({...formDetails, username: updateUsername});
-  }
+    function updateEmail(updatedEmail) {
+        setFormDetails({...formDetails, email: updatedEmail});
+    }
 
-  function onFormSubmit() {
-      setFormDetails({...formDetails, isLoading: true});
-      onSubmit(formDetails);
-  }
+    function updatePassword(updatedPassword) {
+        setFormDetails({...formDetails, password: updatedPassword});
+    }
 
-  
-  useEffect(()=>{
-    setFormDetails({email: '', password: '', username: '', isLoading: false});
+    function updateUsername(updateUsername) {
+        setFormDetails({...formDetails, username: updateUsername});
+    }
 
-  },[resetForm])
-  return (
-    <>
-       
-        <div className="input-group">
-          <input
-          onChange={(e)=>updateUsername(e.target.value)}
-            type="text"
-            className="form-control"
-            placeholder="Username"
-            id="loginUsername"
-          />
-        </div>
-      
-      <div className="input-group">
-        <input
-        onChange={(e)=>{
-          return updateEmail(e.target.value)
+    function onFormSubmit() {
+        setFormDetails({...formDetails, isLoading: true});
+        onSubmit(formDetails, resetForm);
+    }
 
-        }}
-          type="email"
-          className="form-control"
-          placeholder="Email"
-          id="loginUserEmail"
-        />
-      </div>
-      <div className="input-group">
-        <input
-        onChange={(e)=>{
-          return updatePassword(e.target.value)
-        }}
-          type="password"
-          className="form-control"
-          placeholder="Password"
-          id="loginPassword"
-        />
-      </div>
-      <div className="input-group">
+    function resetForm() {
+        setFormDetails({email: '', password: '', username: '', isLoading: false});
+    }
 
-        <button onClick={onFormSubmit} className="btn btn-primary form-control" type="button" disabled={formDetails.isLoading}>
-        {formDetails.isLoading&&  <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
-          {(formDetails.isLoading)?'Loading...':'Submit'}
-        </button>
-      </div>
-    </>
-  )
+    useImperativeHandle(ref, () => {
+        return {
+            resetFormData: resetForm
+        }
+    }, []);
+
+    useEffect(() => {
+        setFormDetails({email: '', password: '', username: '', isLoading: false});
+    }, [])
+
+    return (
+        <>
+            <div className="input-group">
+                <input onChange={(e) => updateUsername(e.target.value)} value={formDetails.username} type="text" className="form-control" placeholder="Username" id="loginUsername"/>
+            </div>
+            <div className="input-group">
+                <input onChange={(e) => updateEmail(e.target.value)} value={formDetails.email} type="email" className="form-control" placeholder="Email" id="loginUserEmail" />
+            </div>
+            <div className="input-group">
+                <input onChange={(e) => updatePassword(e.target.value)} value={formDetails.password} type="password" className="form-control" placeholder="Password" id="loginPassword"/>
+            </div>
+            
+            <div className="input-group">
+            <button onClick={onFormSubmit} className="form-control btn btn-primary" type="button" disabled={formDetails.isLoading}>
+            {(formDetails.isLoading) && <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>}
+                {(formDetails.isLoading) ? 'Loading...' : 'Submit'}
+            </button>
+            </div>
+        </>
+    )
 }
 
-export default Auth;
+export default React.forwardRef(Auth);

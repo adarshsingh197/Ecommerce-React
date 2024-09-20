@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import './Auth.css';
 import Auth from "../../components/Auth/Auth";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,25 +6,28 @@ import axios from "axios";  // Import axios
 import { signin } from "../../api/fakestoreProd";
 import Cookies from "js-cookie";
 import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode";
+import userContext from "../../context/userContext";
 const Login = () => {
   const authRef = useRef(null);
   const navigate = useNavigate()
-  const [token,setToken]= useCookies(['jwt-token'])
+  const [token,setToken]= useCookies(['jwt-token']);
+  const {user,setUser}= useContext(userContext);
 
   async function onAuthFormSubmit(formDetails) {
-    console.log(formDetails);
     try {
       const response = await axios.post(signin(), {
         username: formDetails.username,
         email: formDetails.email,
         password: formDetails.password
       });
-      console.log(response);
-      setToken('jwt-token',response.data.token,{httpOnly:true});
+      const tokenDetails = jwtDecode(response.data.token);
+      setUser({username:tokenDetails.user,id:tokenDetails})
+      setToken('jwt-token',response.data.token);
       navigate('/')
     } catch (error) {
       if (authRef.current && authRef.current.resetFormData) {
-        authRef.current.resetFormData();  // Correct reference to the method
+        authRef.current.resetFormData();  
       }
       console.error("Error during sign in:", error);
     }

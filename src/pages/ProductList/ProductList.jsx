@@ -13,7 +13,6 @@ const ProductList = () => {
     const downloadUrl = category? getallproductsbyCategory(category):allproductsapi;
     const product = await axios.get(downloadUrl);
     const response = await product.data;
-    console.log(response)
     setProductsList(response);
   }
   useEffect(()=>{

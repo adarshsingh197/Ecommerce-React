@@ -4,7 +4,6 @@ import useCategory from '../../hooks/useCategory';
 
 const Home = () => {
    const categories = useCategory();
-   console.log(categories);
 
    return (
      <div className="container welcome-wrapper">

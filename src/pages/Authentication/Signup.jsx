@@ -16,7 +16,6 @@ function Signup() {
             });
             navigate('/signin');
         } catch(error) {
-            console.log(error);
             resetForm();
         }
     }

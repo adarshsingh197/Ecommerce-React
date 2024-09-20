@@ -20,10 +20,10 @@ const Login = () => {
         username: formDetails.username,
         email: formDetails.email,
         password: formDetails.password
-      });
+      },{withCredentials:true});
       const tokenDetails = jwtDecode(response.data.token);
       setUser({username:tokenDetails.user,id:tokenDetails})
-      setToken('jwt-token',response.data.token);
+      setToken('jwt-token',response.data.token,{httpOnly:true});
       navigate('/')
     } catch (error) {
       if (authRef.current && authRef.current.resetFormData) {

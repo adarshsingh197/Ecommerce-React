@@ -11,34 +11,33 @@ import {
   DropdownItem,
   NavbarText,
 } from 'reactstrap';
-import './Header.css'
-import { Link } from 'react-router-dom';
-import Cookies from "js-cookie";
+import './Header.css';
 import { useCookies } from 'react-cookie';
+import { Link } from 'react-router-dom';
 import UserContext from '../../context/userContext';
 import CartContext from '../../context/CartContext';
 
 function Header(props) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
-  const [token,setToken,removeToken] = useCookies(['jwt-token']);
-  const {user, setUser} = useContext(UserContext);
-  const {cart}= useContext(CartContext)
-  useEffect(()=>{
-      console.log(token)
-  },[token])
+  const [token, setToken, removeToken] = useCookies(['jwt-token']);
+  const { user, setUser } = useContext(UserContext);
+  const { cart } = useContext(CartContext);
 
+  useEffect(() => {
+    console.log(token);
+  }, [token]);
 
   return (
     <div>
       <Navbar {...props}>
-        <NavbarBrand  id='title'>
-        <Link to="/" >Shop Cart</Link>
+        <NavbarBrand id="title">
+          <Link to="/">Shop Cart</Link>
         </NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ms-auto" navbar>
-            <UncontrolledDropdown nav inNavbar style={{marginRight:'2rem'}}>
+            <UncontrolledDropdown nav inNavbar style={{ marginRight: '2rem' }}>
               <DropdownToggle nav caret>
                 Options
               </DropdownToggle>
@@ -48,18 +47,27 @@ function Header(props) {
                 <DropdownItem divider />
                 <DropdownItem>
                   {console.log(token)}
-                  {token['jwt-token']?<Link onClick={()=>{
-                    
-                    removeToken('jwt-token');
-                    setUser(null)
-                  }} to='/signin'>Logout</Link>:<Link to='/signin'>Login</Link>}
-                  
+                  {token['jwt-token'] ? (
+                    <Link
+                      onClick={() => {
+                        removeToken('jwt-token');
+                        axios.get(`${import.meta.env.VITE_FAKE_STORE_URL}/logout`, {
+                          withCredentials: true,
+                        });
+                        setUser(null);
+                      }}
+                      to="/signin"
+                    >
+                      Logout
+                    </Link>
+                  ) : (
+                    <Link to="/signin">Login</Link>
+                  )}
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-           {user&& <NavbarText>{user.username}</NavbarText>}
+            {user && <NavbarText>{user.username}</NavbarText>}
           </Nav>
-         
         </Collapse>
       </Navbar>
     </div>

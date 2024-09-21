@@ -11,7 +11,7 @@ import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 function App() {
   const [user, setUser] = useState(null);
-  const [cart, setCart] = useState({products:[]});
+  const [cart, setCart] = useState(null);
   const [token,setToken]= useCookies(['jwt-token']);
   
 
@@ -24,7 +24,7 @@ function App() {
       setToken('jwt-token', res.data.token, {httpOnly: true});
 
     })
-  })
+  },[])
 
   return (
     <CartContext.Provider value={{ cart, setCart }}>

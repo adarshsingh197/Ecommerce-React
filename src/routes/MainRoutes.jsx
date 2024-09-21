@@ -6,6 +6,7 @@ import ProductList from '../pages/ProductList/ProductList'
 import ProductDetails from '../pages/ProductDetails/ProductDetails'
 import Login from '../pages/Authentication/Login'
 import Signup from '../pages/Authentication/Signup'
+import Cart from '../pages/Cart/Cart'
 
 const MainRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const MainRoutes = () => {
     <Route path='/products/:id' element={<ProductDetails/>}/>
     <Route path='/signin' element={<Login/>} />
     <Route path='/signup' element={<Signup/>}/>
+    <Route path='/cart/:userId' element={<Cart/>} />
     <Route path="*" element={<Error/>} />
    </Routes>
   )

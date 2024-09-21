@@ -16,14 +16,15 @@ import { useCookies } from 'react-cookie';
 import { Link } from 'react-router-dom';
 import UserContext from '../../context/userContext';
 import CartContext from '../../context/CartContext';
+import useCart from '../../hooks/useCart';
+import axios from 'axios';
 
 function Header(props) {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const [token, setToken, removeToken] = useCookies(['jwt-token']);
   const { user, setUser } = useContext(UserContext);
-  const { cart } = useContext(CartContext);
-
+  const {cart, setCart} = useContext(CartContext);
   useEffect(() => {
     console.log(token);
   }, [token]);
@@ -42,8 +43,8 @@ function Header(props) {
                 Options
               </DropdownToggle>
               <DropdownMenu end>
-                <DropdownItem>Cart {cart.products.length}</DropdownItem>
-                <DropdownItem>Setting</DropdownItem>
+              { user && <DropdownItem> <Link to={`/cart/${user.id}`}>Cart {cart && cart.products && `(${cart.products.length})`}</Link></DropdownItem> }
+              <DropdownItem>Setting</DropdownItem>
                 <DropdownItem divider />
                 <DropdownItem>
                   {console.log(token)}
@@ -51,10 +52,14 @@ function Header(props) {
                     <Link
                       onClick={() => {
                         removeToken('jwt-token');
-                        axios.get(`${import.meta.env.VITE_FAKE_STORE_URL}/logout`, {
-                          withCredentials: true,
-                        });
-                        setUser(null);
+                        setTimeout(() => {
+                          axios.get(`${import.meta.env.VITE_FAKE_STORE_URL}/logout`, { withCredentials: true })
+                            .then(() => {
+                              setUser(null);
+                              setCart(null);
+                            })
+                            .catch(error => console.error('Logout failed', error));
+                        }, 0);
                       }}
                       to="/signin"
                     >

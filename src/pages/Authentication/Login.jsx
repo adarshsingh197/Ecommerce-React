@@ -4,7 +4,6 @@ import Auth from "../../components/Auth/Auth";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";  // Import axios
 import { signin } from "../../api/fakestoreProd";
-import Cookies from "js-cookie";
 import { useCookies } from "react-cookie";
 import { jwtDecode } from "jwt-decode";
 import userContext from "../../context/userContext";
@@ -20,7 +19,7 @@ const Login = () => {
         username: formDetails.username,
         email: formDetails.email,
         password: formDetails.password
-      },{withCredentials:true});
+      },{withCredentials: true});
       const tokenDetails = jwtDecode(response.data.token);
       setUser({username:tokenDetails.user,id:tokenDetails})
       setToken('jwt-token',response.data.token,{httpOnly:true});
